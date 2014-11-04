@@ -2,6 +2,14 @@
 <html>
 <head>
 <script>
+function loadCount() {
+  if(localStorage.clickcount > 0) {
+    document.getElementById("result").innerHTML = "You have clicked the button " + localStorage.clickcount + " times.";
+  }
+  else {
+    document.getElementById("result").innerHTML = "Click hey";
+  }
+}
 function clickCounter() {
     if(typeof(Storage) !== "undefined") {
         if (localStorage.clickcount) {
@@ -9,15 +17,16 @@ function clickCounter() {
         } else {
             localStorage.clickcount = 1;
         }
-        document.getElementById("result").innerHTML = "You have clicked the button " + localStorage.clickcount + " time(s).";
+        document.getElementById("result").innerHTML = "You have clicked the button " + localStorage.clickcount + " times.";
     } else {
         document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
     }
 }
+window.onload = loadCount;
 </script>
 </head>
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="viewport" content = "width = device-width, height = device-height, initial-scale = 1, user-scalable = no" />
-<h1 align="center"> hey! </h1>
+<h1 onclick="clickCounter()" align="center"> hey! </h1>
 <div id="result"></div>
 </html>
