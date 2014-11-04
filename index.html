@@ -1,6 +1,23 @@
 <!DOCTYPE html>
 <html>
+<head>
+<script>
+function clickCounter() {
+    if(typeof(Storage) !== "undefined") {
+        if (localStorage.clickcount) {
+            localStorage.clickcount = Number(localStorage.clickcount)+1;
+        } else {
+            localStorage.clickcount = 1;
+        }
+        document.getElementById("result").innerHTML = "You have clicked the button " + localStorage.clickcount + " time(s).";
+    } else {
+        document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
+    }
+}
+</script>
+</head>
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="viewport" content = "width = device-width, height = device-height, initial-scale = 1, user-scalable = no" />
 <h1 align="center"> hey! </h1>
+<div id="result"></div>
 </html>
