@@ -18,12 +18,14 @@ function clickCounter() {
         document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
     }
 }
-function table() {
+function loadData() {
   data = '[{"amount":"10","merchant":"Safeway"},{"amount":"12","merchant":"chipotle"}]';
   rows = JSON.parse(data);
+  var spent;
+  var saved;
   for (key in rows) {
-    window.console.log(rows[key].amount);
+    rows[key].amount += spent;
   }
 }
 window.onload = loadCount;
-table();
+loadData();
