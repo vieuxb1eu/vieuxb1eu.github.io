@@ -17,7 +17,7 @@
       <p> How much? </p>
       <div class="input-group">
          <span class="input-group-addon">&#128184;</span>
-         <input type="number" min="0" pattern="[0-9]*" class="form-control" id="amount-input">
+         <input type="number" min="0" step="any"  pattern="[0-9]*" class="form-control" id="amount-input">
       </div>
       </br>
       </br>
@@ -28,7 +28,7 @@
       </div>
       </br>
       </br>
-      <button type="button" class="btn btn-success btn-lg" onClick="addExpense()">Add</button>
+      <button type="button" class="btn btn-primary btn-lg" onClick="addExpense()">Add</button>
    </div>
    <div class="jumbotron alt-2">
       <p>Remaining:</p>
@@ -38,9 +38,26 @@
       <p>Spent:</p>
       <h1 id="spent"> $0 </h1>
    </div>
-   <div class="jumbotron alt-2" style="display: none;" id="table-container">
-      <p id="table"></p>
+   <div class="jumbotron alt-2"  id="table-container">
+      <p> Spending: </p>
+      <p id="table" align="center">No Spending</p>
    </div>
+   <div class="jumbotron alt" id="settings">
+     <h1 align="center"><span class="glyphicon glyphicon-cog"></span></h1>
+   </div>
+   <div class="jumbotron alt" id="add-budget" style="display: none;">
+     <p> Weekly budget? </p>
+     <div class="input-group">
+       <span class="input-group-addon">&#128176;</span>
+       <input type="number" min"0" pattern="[0-9]*" class="form-control" id="budget-input">
+     </div>
+     </br>
+     </br>
+     <button type="button" class="btn btn-primary btn-lg" onclick="addBudget();"> Save </button>
+     </br>
+     </br>
+     <button type="button" class="btn btn-warning btn-lg" onclick="resetData();"> New Cycle </button>
+  </div>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
    <script src="js.js"></script>

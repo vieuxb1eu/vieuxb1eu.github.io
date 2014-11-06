@@ -1,12 +1,21 @@
-budget = 120
-data = localStorage.data
+budget = localStorage.budget; 
+data = localStorage.data;
 
-if (data) {
-  var rows = JSON.parse(data);
-  var spent = 0;
-  var saved;
+if (budget) {
+  if (data) {
+    var rows = JSON.parse(data);
+    var spent = 0;
+    var saved;
+    loadData();
+    makeTable();
+  }
+  else {
+    rows = {};
+    loadData();
+  }
 }
 else {
+  getBudget();
   rows = {};
 }
 
@@ -17,20 +26,31 @@ function loadData() {
   }
   document.getElementById("spent").innerHTML = "$" + spent;
   document.getElementById("saved").innerHTML = "$" + (budget-spent);
-  if (data) {
-    makeTable();
-  }
 }
 
 function resetPage() {
-  loadData();
-  $("#add").hide();
-  $("[id^=options").hide();
   $("#amount-input").val("");
   $("#merchant-input").val("");
+  $("#add").hide();
+  $("#add-budget").hide();
+  $("[id^=options]").hide();
+  loadData();
+  makeTable();
 }
 
-loadData();
+function getBudget() {
+  $("#add-budget").toggle(250,function() {
+    if( $("#add-budget").is(":visible")) {
+      $("#budget-input").focus();
+    }
+  });
+}
+
+function addBudget() {
+  budget = parseInt(document.getElementById("budget-input").value);
+  localStorage.budget = budget 
+  resetPage();
+}
 
 function addExpense() {
   if (data) {  
@@ -58,8 +78,11 @@ function makeTable() {
     content += "<li class='list-group-item list-alt' id='options" + key + "' style='display:none;' onclick='removeItem(" + key +");'><span class='glyphicon glyphicon-trash list-alt'></span></li>";
   }
   content += "</div>";
+  if (Object.keys(rows).length < 1) {
+    content = "No spending";
+  }
   document.getElementById("table").innerHTML = content;
-  $("#table-container").show();
+  /*$("#table-container").show();*/
 }
 
 function listOptions(key) {
@@ -71,12 +94,22 @@ function removeItem(key) {
   saveData();
 }
 
+function resetData() {
+  data = null;
+  rows = {};
+  saveData();
+}
+
 $(document).ready (function(){
   $("#plus").click(function(){
-    $("#add").toggle(250);
-    if( $("#add").is(":visible")) {
-      $("#amount-input").focus();
-    }
+    $("#add").toggle(250, function() {
+      if( $("#add").is(":visible")) {
+        $("#amount-input").focus();
+      }
+    });
+  });
+  $("#settings").click(function(){
+    getBudget();
   });
 });
 
