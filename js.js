@@ -25,6 +25,7 @@ function loadData() {
 function resetPage() {
   loadData();
   $("#add").hide();
+  $("[id^=options").hide();
   $("#amount-input").val("");
   $("#merchant-input").val("");
 }
@@ -51,19 +52,26 @@ function saveData() {
 }
 
 function makeTable() {
-  content = "<table class='table'>";
+  content = "<div class='list-group'>";
   for (key in rows) {
-    content += "<tr id='entry" + key + "'><td>" + rows[key].merchant + "</td><td>" + "$" + rows[key].amount + "</td></tr>"
-    content += "<tr id='delete" + key + "' value='" + key + "' style='display: none;'><td><span class='glyphicon glyphicon-trash'></span></td></tr>"
+    content += "<a href='javascript:void(0);' onclick='listOptions(" + key + ");' class='list-group-item' style='background-color: #66BAC7;'>$" + rows[key].amount + "-" + rows[key].merchant +"</a>";
+    content += "<li class='list-group-item list-alt' id='options" + key + "' style='display:none;' onclick='removeItem(" + key +");'><span class='glyphicon glyphicon-trash list-alt'></span></li>";
   }
-  content += "</table>";
+  content += "</div>";
   document.getElementById("table").innerHTML = content;
   $("#table-container").show();
 }
+
+function listOptions(key) {
+  $("#options" + key).toggle(250);
+}
+
+function removeItem(key) {
+  delete rows[key];
+  saveData();
+}
+
 $(document).ready (function(){
-  $("[id^=entry").click(function(){
-    $("#delete0").toggle();
-  });
   $("#plus").click(function(){
     $("#add").toggle(250);
     if( $("#add").is(":visible")) {

@@ -4692,9 +4692,6 @@ a.list-group-item.active > .badge,
   margin-bottom: 0px;
   background-color: #66BAC7;
 }
-.mini {
-  
-}
 .thumbnail {
   display: block;
   padding: 4px;
@@ -6365,5 +6362,11 @@ button.close {
   .hidden-print {
     display: none !important;
   }
+}
+.list-alt {
+  background-color: #FF9999;
+}
+.list-alt:hover {
+  background-color: #FF9999;
 }
 /*# sourceMappingURL=bootstrap.css.map */
