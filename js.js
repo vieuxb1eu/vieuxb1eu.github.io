@@ -1,31 +1,57 @@
-function loadCount() {
-  if(localStorage.clickcount > 0) {
-    document.getElementById("result").innerHTML = "You have clicked the button " + localStorage.clickcount + " times.";
+budget = 120
+data = localStorage.data
+
+if (data) {
+  var rows = JSON.parse(data);
+  var spent = 0;
+  var saved;
+}
+else {
+  rows = {};
+}
+
+function loadData() {
+  var spent = 0;
+  for (key in rows) {
+    spent += parseInt(rows[key].amount);
+  }
+  document.getElementById("spent").innerHTML = "$" + spent;
+  document.getElementById("saved").innerHTML = "$" + (budget-spent);
+}
+
+function resetPage() {
+  loadData();
+  $("#add").hide();
+  $("#amount-input").val("");
+  $("#merchant-input").val("");
+}
+
+loadData();
+
+function addExpense() {
+  if (data) {  
+    row = (Object.keys(rows).length + 1);
   }
   else {
-    document.getElementById("result").innerHTML = "Click hey";
+    row = 0;
   }
+  amount = parseInt(document.getElementById("amount-input").value);
+  merchant = document.getElementById("merchant-input").value;
+  rows[row] = {amount: amount, merchant: merchant};
+  saveData();
 }
-function clickCounter() {
-    if(typeof(Storage) !== "undefined") {
-        if (localStorage.clickcount) {
-            localStorage.clickcount = Number(localStorage.clickcount)+1;
-        } else {
-            localStorage.clickcount = 1;
-        }
-        document.getElementById("result").innerHTML = "You have clicked the button " + localStorage.clickcount + " times.";
-    } else {
-        document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
+
+function saveData() {
+  data = JSON.stringify(rows);
+  localStorage.data = data;
+  resetPage();
+}
+$(document).ready (function(){
+  $("#plus").click(function(){
+    $("#add").toggle(250);
+    if( $("#add").is(":visible")) {
+      $("#amount-input").focus();
     }
-}
-function loadData() {
-  data = '[{"amount":"10","merchant":"Safeway"},{"amount":"12","merchant":"chipotle"}]';
-  rows = JSON.parse(data);
-  var spent;
-  var saved;
-  for (key in rows) {
-    rows[key].amount += spent;
-  }
-}
-window.onload = loadCount;
-loadData();
+  });
+});
+

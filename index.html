@@ -2,13 +2,31 @@
 <html>
    <head>
       <meta name="apple-mobile-web-app-status-bar-style" content="translucent">
-      <meta name="viewport" content = "width = device-width, height = device-height, initial-scale = 1, user-scalable = no" />
+      <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
       <meta name="apple-mobile-web-app-capable" content="yes" />
+      <link href="Images/Default-568h@2x.png" rel="apple-touch-startup-image" sizes="640x1096">
       <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
    </head>
-   <div class="jumbotron">
-      <h1 onclick="clickCounter()" align="center"><span class="glyphicon glyphicon-plus"></span></h1>
+   <div class="jumbotron" id="plus">
+      <h1 align="center"><span class="glyphicon glyphicon-plus"></span></h1>
       <div id="result"></div>
+   </div>
+   <div class="jumbotron" id="add" style="display: none;">
+      <p> How much? </p>
+      <div class="input-group">
+        <span class="input-group-addon">&#128184;</span>
+        <input type="number" min="0" pattern="[0-9]*" class="form-control" id="amount-input">
+      </div>
+   </br>
+   </br>
+      <p> On what? </p>
+      <div class="input-group">
+      <span class="input-group-addon">&#128129;</span>
+      <input type="text" class="form-control" id="merchant-input">
+      </div>
+   </br>
+   </br>
+      <button type="button" class="btn btn-success btn-lg" onClick="addExpense()">Add</button>
    </div>
    <div class="jumbotron">
       <p>Remaining:</p>
@@ -18,7 +36,8 @@
       <p>Spent:</p>
       <h1 id="spent"> $46 </h1>
    </div>
-   <div class="jumbotron" style="display: none;"></div>
+   <div class="jumbotron" id="table" style="display: none;">
+   </div>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
    <script src="js.js"></script>
