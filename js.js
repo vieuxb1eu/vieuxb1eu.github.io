@@ -22,10 +22,10 @@ else {
 function loadData() {
   var spent = 0;
   for (key in rows) {
-    spent += parseInt(rows[key].amount);
+    spent += parseFloat(rows[key].amount);
   }
-  document.getElementById("spent").innerHTML = "$" + spent;
-  document.getElementById("saved").innerHTML = "$" + (budget-spent);
+  document.getElementById("spent").innerHTML = "$" + spent.toFixed(2);
+  document.getElementById("saved").innerHTML = "$" + (budget-spent).toFixed(2);
 }
 
 function resetPage() {
@@ -59,7 +59,7 @@ function addExpense() {
   else {
     row = 0;
   }
-  amount = parseInt(document.getElementById("amount-input").value);
+  amount = parseFloat(document.getElementById("amount-input").value).toFixed(2);
   merchant = document.getElementById("merchant-input").value;
   rows[row] = {amount: amount, merchant: merchant};
   saveData();
