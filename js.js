@@ -53,16 +53,39 @@ function addBudget() {
 }
 
 function addExpense() {
+  var d = new Date();
+  date = getDay(d.getDay()) + " " + getHour(d.getHours());
   if (data) {  
-    row = (Object.keys(rows).length + 1);
+    row = parseInt(Object.keys(rows)[Object.keys(rows).length-1]) + 1;
   }
   else {
     row = 0;
   }
   amount = parseFloat(document.getElementById("amount-input").value).toFixed(2);
   merchant = document.getElementById("merchant-input").value;
-  rows[row] = {amount: amount, merchant: merchant};
+  rows[row] = {amount: amount, date: date, merchant: merchant};
   saveData();
+}
+
+function getDay(day) {
+  days = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"];
+  return days[day];
+}
+
+function getHour(hour) {
+  if (hour > 12) {
+    hour -= 12
+    return hour + "PM";
+  }
+  if (hour == 0) {
+    return "12AM";
+  }
+  if (hour == 12) {
+    return "12PM";
+  }
+  else {
+    return hour + "AM"
+  }
 }
 
 function saveData() {
@@ -74,7 +97,7 @@ function saveData() {
 function makeTable() {
   content = "<div class='list-group'>";
   for (key in rows) {
-    content += "<a href='javascript:void(0);' onclick='listOptions(" + key + ");' class='list-group-item' style='background-color: #66BAC7;'>$" + rows[key].amount + "-" + rows[key].merchant +"</a>";
+    content += "<a href='javascript:void(0);' onclick='listOptions(" + key + ");' class='list-group-item' style='background-color: #66BAC7;'>$" + rows[key].amount + "-" + rows[key].date + "-" + rows[key].merchant +"</a>";
     content += "<li class='list-group-item list-alt' id='options" + key + "' style='display:none;' onclick='removeItem(" + key +");'><span class='glyphicon glyphicon-trash list-alt'></span></li>";
   }
   content += "</div>";
