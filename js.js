@@ -118,9 +118,10 @@ function removeItem(key) {
 }
 
 function resetData() {
+  localStorage.clear();
   data = null;
   rows = {};
-  saveData();
+  resetPage();
 }
 
 $(document).ready (function(){
