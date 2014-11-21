@@ -55,12 +55,13 @@ function addBudget() {
 function addExpense() {
   var d = new Date();
   date = getDay(d.getDay()) + " " + getHour(d.getHours());
-  if (data) {  
-    row = parseInt(Object.keys(rows)[Object.keys(rows).length-1]) + 1;
-  }
-  else {
+  
+  row = parseInt(Object.keys(rows)[Object.keys(rows).length-1]) + 1;
+
+  if (isNaN(row)){
     row = 0;
   }
+  
   amount = parseFloat(document.getElementById("amount-input").value).toFixed(2);
   merchant = document.getElementById("merchant-input").value;
   rows[row] = {amount: amount, date: date, merchant: merchant};
@@ -91,6 +92,7 @@ function getHour(hour) {
 function saveData() {
   data = JSON.stringify(rows);
   localStorage.data = data;
+  localStorage.budget = budget;
   resetPage();
 }
 
@@ -119,8 +121,9 @@ function removeItem(key) {
 
 function resetData() {
   localStorage.clear();
-  data = null;
+  data = undefined;
   rows = {};
+  saveData();
   resetPage();
 }
 
