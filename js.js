@@ -97,16 +97,30 @@ function saveData() {
 }
 
 function makeTable() {
-  content = "<div class='list-group'>";
+  content = "<div class='row' id='table-div' style='display:none;'>";
   for (key in rows) {
-    content += "<a href='javascript:void(0);' onclick='listOptions(" + key + ");' class='list-group-item' style='background-color: #66BAC7;'>$" + rows[key].amount + "-" + rows[key].date + "-" + rows[key].merchant +"</a>";
-    content += "<li class='list-group-item list-alt' id='options" + key + "' style='display:none;' onclick='removeItem(" + key +");'><span class='glyphicon glyphicon-trash list-alt'></span></li>";
+    content += "<a href='javascript:void(0);' onclick='listOptions(" + key + ");' id='item"+key+"' class='list-group-item' style='background-color: #66BAC7;'><strong>" + rows[key].date + "</strong>-" + rows[key].merchant + "-" + "$" + rows[key].amount +"</a>";
+    
+    content += "<div class='row' id='options" + key + "' style='display:none;'>"
+    content += "<div class='col-xs-6 list-alt' style='font-size: 30px' onclick='removeItem(" + key + ");'><span class='glyphicon glyphicon-trash list-alt'></span></div>";
+    content += "<div class='col-xs-6 list-alt-edit' onclick='showEdit("+key+");' style='font-size: 30px'><span class='glyphicon glyphicon-pencil list-alt-edit'></span></div>";
+    content += "</div>";
+
+    content += "<div id='edit" + key + "' style='display: none;'>";
+    content += "<div class='input-group' style='padding:10px'><p><input style='padding:10px' type='text' id='date"+key+"' value='"+rows[key].date+"'></p>";
+    content += "<p><input type='text' id='merchant"+key+"' style='padding:10px' value='"+rows[key].merchant+"'></p>";
+    content += "<p><input type='number' min'0' step'any' id='amount"+key+"' style='padding:10px' value='"+rows[key].amount+"'></p>";
+    content += "<p><div class='col-xs-6 list-alt' style='font-size: 30px' onclick='closeEdit("+key+");'><span class='glyphicon glyphicon-remove list-alt'></span></div>";
+    content += "<p><div class='col-xs-6 list-alt-green' style='font-size: 30px' onclick='editRow("+key+");'><span class='glyphicon glyphicon-ok list-alt-green'></span></div>";
+    content += "</div>";
+    content += "</div>";
   }
   content += "</div>";
   if (Object.keys(rows).length < 1) {
     content = "No spending";
   }
   document.getElementById("table").innerHTML = content;
+  $("#table-div").fadeIn();
   /*$("#table-container").show();*/
 }
 
@@ -114,9 +128,31 @@ function listOptions(key) {
   $("#options" + key).toggle(250);
 }
 
-function removeItem(key) {
-  delete rows[key];
+function showEdit(key){
+  $("#options" + key).toggle(250, function(){
+    $("#edit" + key).toggle(250);
+  });
+}
+
+function closeEdit(key){
+  $("#edit" + key).toggle(250);
+}
+
+function editRow(key){
+  newAmount = parseFloat(document.getElementById("amount"+key).value).toFixed(2);
+  newMerchant = document.getElementById("merchant" + key).value;
+  newDate = document.getElementById("date" + key).value;
+  rows[key] = {amount: newAmount, merchant: newMerchant, date: newDate};
   saveData();
+}
+
+function removeItem(key) {
+  $("#options" + key).toggle(250, function(){
+    $("#item" + key).fadeOut(function(){
+      delete rows[key];
+      saveData();
+    });
+  });
 }
 
 function resetData() {
@@ -125,6 +161,16 @@ function resetData() {
   rows = {};
   saveData();
   resetPage();
+}
+
+function createEmail() {
+  email = '<table style="width:100%">';
+  for (key in rows) {
+    email += "<tr>";
+    email += "<td>"+rows[key].date + "</td><td>"+rows[key].merchant+"</td><td>"+ rows[key].amount+"</td>";
+    email += "</tr>";
+  }
+  email += "</table>";
 }
 
 $(document).ready (function(){
@@ -136,7 +182,8 @@ $(document).ready (function(){
     });
   });
   $("#settings").click(function(){
-    getBudget();
-  });
+    $("#add-budget").toggle(250, function(){
+      $('html, body').animate({scrollTop:$(document).height()}, 'slow');
+    });
+    });
 });
-

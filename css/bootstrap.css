@@ -6369,4 +6369,10 @@ button.close {
 .list-alt:hover {
   background-color: #FF9999;
 }
+.list-alt-edit {
+  background-color: #BFBFBF;
+}
+.list-alt-green {
+  background-color: #9DE0AD;
+}
 /*# sourceMappingURL=bootstrap.css.map */
