@@ -29,13 +29,14 @@ function loadData() {
 }
 
 function resetPage() {
-  $("#amount-input").val("");
-  $("#merchant-input").val("");
-  $("#add").hide();
-  $("#add-budget").hide();
-  $("[id^=options]").hide();
-  loadData();
-  makeTable();
+  // $("#amount-input").val("");
+  // $("#merchant-input").val("");
+  // $("#add").hide();
+  // $("#add-budget").hide();
+  // $("[id^=options]").hide();
+  // loadData();
+  // makeTable();
+  location.reload();
 }
 
 function getBudget() {
@@ -173,6 +174,31 @@ function createEmail() {
   email += "</table>";
 }
 
+function showOptionsBudget() {
+  content = "";
+  content += "<p>Weekly budget? </p><div class='input-group'><span class='input-group-addon'>&#128176;</span>";
+  content += "<input type='number' min'0' pattern='[0-9]*' class='form-control' id='budget-input' value='"+localStorage.budget+"'></div>";
+  content += "</br></br>";
+
+  content += "<h2 align='center'><div class='col-xs-6 list-alt' onclick='resetPage();'><span class='glyphicon glyphicon-remove list-alt'></span></div>";
+  content += "<div class='col-xs-6 list-alt-green' onclick='addBudget();'><span class='glyphicon glyphicon-ok list-alt-green'></span></div></h2>";
+  content += "</br></br>";
+  document.getElementById("options-body").innerHTML = content;
+  $("#options-body").show();
+}
+
+function showOptionsRefresh() {
+  content = "";
+  content += "<p>Clear expenses and start new cycle?</p>";
+  content += "</br>";
+
+  content += "<h2 align='center'><div class='col-xs-6 list-alt' onclick='resetPage();'><span class='glyphicon glyphicon-remove list-alt'></span></div>";
+  content += "<div class='col-xs-6 list-alt-green' onclick='resetData();'><span class='glyphicon glyphicon-ok list-alt-green'></span></div></h2>";
+  content += "</br></br>";
+  document.getElementById("options-body").innerHTML = content;
+  $("#options-body").show();
+}
+
 $(document).ready (function(){
   $("#plus").click(function(){
     $("#add").toggle(250, function() {
@@ -181,9 +207,9 @@ $(document).ready (function(){
       }
     });
   });
-  $("#settings").click(function(){
-    $("#add-budget").toggle(250, function(){
-      $('html, body').animate({scrollTop:$(document).height()}, 'slow');
-    });
-    });
+  // $("#settings").click(function(){
+  //   $("#add-budget").toggle(250, function(){
+  //     $('html, body').animate({scrollTop:$(document).height()}, 'slow');
+  //   });
+  //   });
 });
