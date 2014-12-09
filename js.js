@@ -29,13 +29,7 @@ function loadData() {
 }
 
 function resetPage() {
-  $("#amount-input").val("");
-  $("#merchant-input").val("");
-  $("#add").hide();
-  $("#add-budget").hide();
-  $("[id^=options]").hide();
-  loadData();
-  makeTable();
+  location.reload();
 }
 
 function getBudget() {
@@ -71,6 +65,12 @@ function addExpense() {
 function getDay(day) {
   days = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"];
   return days[day];
+}
+
+function getMonth() {
+  d = new Date();
+  months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  return months[d.getMonth()];
 }
 
 function getHour(hour) {
@@ -164,13 +164,72 @@ function resetData() {
 }
 
 function createEmail() {
-  email = '<table style="width:100%">';
+  d = new Date();
+  localStorage.email = document.getElementById("email-input").value;
+  subject = "Budget: "+getMonth() + " "+d.getDate();
+  email = localStorage.email +"?subject="+subject+"&body=";
+  email += '<table style="width:100%">';
   for (key in rows) {
     email += "<tr>";
     email += "<td>"+rows[key].date + "</td><td>"+rows[key].merchant+"</td><td>"+ rows[key].amount+"</td>";
     email += "</tr>";
   }
   email += "</table>";
+  return email;
+}
+
+function gotoEmail() {
+  window.location="mailto:"+createEmail();
+}
+
+function showOptionsBudget() {
+  content = "";
+  content += "<p>Weekly budget? </p><div class='input-group'><span class='input-group-addon'>&#128176;</span>";
+  content += "<input type='number' min'0' pattern='[0-9]*' class='form-control' id='budget-input' value='"+localStorage.budget+"'></div>";
+  content += "</br></br>";
+
+  content += "<h2 align='center'><div class='col-xs-6 list-alt' onclick='resetPage();'><span class='glyphicon glyphicon-remove list-alt'></span></div>";
+  content += "<div class='col-xs-6 list-alt-green' onclick='addBudget();'><span class='glyphicon glyphicon-ok list-alt-green'></span></div></h2>";
+  content += "</br></br>";
+  document.getElementById("options-body").innerHTML = content;
+  showOptions();
+}
+
+function showOptionsRefresh() {
+  content = "";
+  content += "<p>Clear expenses and start new cycle?</p>";
+  content += "</br>";
+
+  content += "<h2 align='center'><div class='col-xs-6 list-alt' onclick='resetPage();'><span class='glyphicon glyphicon-remove list-alt'></span></div>";
+  content += "<div class='col-xs-6 list-alt-green' onclick='resetData();'><span class='glyphicon glyphicon-ok list-alt-green'></span></div></h2>";
+  content += "</br></br>";
+  document.getElementById("options-body").innerHTML = content;
+  showOptions();
+}
+
+function showOptionsEmail() {
+  if (localStorage.email == undefined) {
+    emailAddress ="";
+  }
+  else {
+    emailAddress = localStorage.email;
+  }
+  content = "";
+  content += "<p>Email address?</p><div class='input-group'><span class='input-group-addon'>&#128238;</span>";
+  content += "<input id='email-input' class='form-control' value='"+emailAddress+"'></div>";
+  content += "</br></br>";
+
+  content += "<h2 align='center'><div class='col-xs-6 list-alt' onclick='resetPage();'><span class='glyphicon glyphicon-remove list-alt'></span></div>";
+  content += "<div class='col-xs-6 list-alt-green' onclick='gotoEmail();'><span class='glyphicon glyphicon-ok list-alt-green'></span></div></h2>";
+  content += "</br></br>";
+  document.getElementById("options-body").innerHTML = content;
+  showOptions();
+}
+
+function showOptions(){
+  $("#options-body").show(function(){
+   $('html, body').animate({scrollTop:$(document).height()}, 'slow');
+  });
 }
 
 $(document).ready (function(){
@@ -181,9 +240,4 @@ $(document).ready (function(){
       }
     });
   });
-  $("#settings").click(function(){
-    $("#add-budget").toggle(250, function(){
-      $('html, body').animate({scrollTop:$(document).height()}, 'slow');
-    });
-    });
 });
