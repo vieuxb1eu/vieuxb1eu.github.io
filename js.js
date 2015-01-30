@@ -120,7 +120,7 @@ function makeTable() {
     content = "No spending";
   }
   document.getElementById("table").innerHTML = content;
-  $("#table-div").fadeIn();
+  $("#table-div").show();
   /*$("#table-container").show();*/
 }
 
@@ -165,16 +165,19 @@ function resetData() {
 
 function createEmail() {
   d = new Date();
-  localStorage.email = document.getElementById("email-input").value;
+  spent = 0;
   subject = "Budget: "+getMonth() + " "+d.getDate();
-  email = localStorage.email +"?subject="+subject+"&body=";
+  email = "?subject="+subject+"&body=";
   email += '<table style="width:100%">';
   for (key in rows) {
+    spent += parseFloat(rows[key].amount);
     email += "<tr>";
     email += "<td>"+rows[key].date + "</td><td>"+rows[key].merchant+"</td><td>"+ rows[key].amount+"</td>";
     email += "</tr>";
   }
   email += "</table>";
+  email += "Spent: $"+spent.toFixed(2);
+  email += "  Remaining: $"+(budget-spent).toFixed(2);
   return email;
 }
 
@@ -208,12 +211,6 @@ function showOptionsRefresh() {
 }
 
 function showOptionsEmail() {
-  if (localStorage.email == undefined) {
-    emailAddress ="";
-  }
-  else {
-    emailAddress = localStorage.email;
-  }
   content = "";
   content += "<p>Email address?</p><div class='input-group'><span class='input-group-addon'>&#128238;</span>";
   content += "<input id='email-input' class='form-control' value='"+emailAddress+"'></div>";
