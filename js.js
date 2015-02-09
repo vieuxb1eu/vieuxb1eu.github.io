@@ -58,7 +58,7 @@ function addExpense() {
   
   amount = parseFloat(document.getElementById("amount-input").value).toFixed(2);
   merchant = document.getElementById("merchant-input").value;
-  rows[row] = {amount: amount, date: date, merchant: merchant};
+  rows[row] = {amount: amount, date: date, merchant: merchant, time: new Date();};
   saveData();
 }
 
