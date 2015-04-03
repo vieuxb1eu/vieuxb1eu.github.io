@@ -6410,4 +6410,9 @@ button.close {
 .list-alt-green {
   background-color: #9DE0AD;
 }
+.drop-down {
+  width: 100%;
+  border: none;
+  font-size: 30px;
+}
 /*# sourceMappingURL=bootstrap.css.map */

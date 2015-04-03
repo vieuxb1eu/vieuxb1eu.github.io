@@ -4,6 +4,11 @@ data = localStorage.data;
 if (budget) {
   if (data) {
     var rows = JSON.parse(data);
+
+    for (key in rows) {
+      rows[key].time = new Date(rows[key].time);
+    }
+
     var spent = 0;
     var saved;
     loadData();
@@ -15,7 +20,7 @@ if (budget) {
   }
 }
 else {
-  getBudget();
+  showOptionsBudget();
   rows = {};
 }
 
@@ -30,14 +35,6 @@ function loadData() {
 
 function resetPage() {
   location.reload();
-}
-
-function getBudget() {
-  $("#add-budget").toggle(250,function() {
-    if( $("#add-budget").is(":visible")) {
-      $("#budget-input").focus();
-    }
-  });
 }
 
 function addBudget() {
@@ -58,9 +55,13 @@ function addExpense() {
   
   amount = parseFloat(document.getElementById("amount-input").value).toFixed(2);
   merchant = document.getElementById("merchant-input").value;
-  rows[row] = {amount: amount, date: date, merchant: merchant, time: new Date();};
+  rows[row] = {amount: amount, date: date, merchant: merchant, time: d};
   saveData();
 }
+
+Date.prototype.setDay = function(dayOfWeek) {
+    this.setDate(this.getDate() - this.getDay() + dayOfWeek);
+};
 
 function getDay(day) {
   days = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"];
@@ -90,6 +91,7 @@ function getHour(hour) {
 }
 
 function saveData() {
+  sortData();
   data = JSON.stringify(rows);
   localStorage.data = data;
   localStorage.budget = budget;
@@ -107,9 +109,44 @@ function makeTable() {
     content += "</div>";
 
     content += "<div id='edit" + key + "' style='display: none;'>";
-    content += "<div class='input-group' style='padding:10px'><p><input style='padding:10px' type='text' id='date"+key+"' value='"+rows[key].date+"'></p>";
-    content += "<p><input type='text' id='merchant"+key+"' style='padding:10px' value='"+rows[key].merchant+"'></p>";
-    content += "<p><input type='number' min'0' step'any' id='amount"+key+"' style='padding:10px' value='"+rows[key].amount+"'></p>";
+    content += "<div class='input-group' style='padding:10px'>";
+    content += "<div class='drop-down'><select id='day"+key+"' class='drop-down' style='padding:10px'> \
+                  <option value=0>Sunday</option> \
+                  <option value=1>Monday</option> \
+                  <option value=2>Tuesday</option> \
+                  <option value=3>Wednesday</option> \
+                  <option value=4>Thursday</option> \
+                  <option value=5>Friday</option> \
+                  <option value=6>Saturday</option> \
+                </select></div>";
+
+    content += "<div class='drop-down' style='padding:10px'><select id='time"+key+"' class='drop-down' style='padding:10px'> \
+                  <option value=0>12AM</option> \
+                  <option value=1>1AM</option> \
+                  <option value=2>2AM</option> \
+                  <option value=3>3AM</option> \
+                  <option value=4>4AM</option> \
+                  <option value=5>5AM</option> \
+                  <option value=6>6AM</option> \
+                  <option value=7>7AM</option> \
+                  <option value=8>8AM</option> \
+                  <option value=9>9AM</option> \
+                  <option value=10>10AM</option> \
+                  <option value=11>11AM</option> \
+                  <option value=12>12PM</option> \
+                  <option value=13>1PM</option> \
+                  <option value=14>2PM</option> \
+                  <option value=15>3PM</option> \
+                  <option value=16>4PM</option> \
+                  <option value=17>5PM</option> \
+                  <option value=18>6PM</option> \
+                  <option value=19>7PM</option> \
+                  <option value=20>8PM</option> \
+                  <option value=21>9PM</option> \
+                  <option value=22>10PM</option> \
+                  <option value=23>11PM</option> \
+                </select></div>";
+
     content += "<p><div class='col-xs-6 list-alt' style='font-size: 30px' onclick='closeEdit("+key+");'><span class='glyphicon glyphicon-remove list-alt'></span></div>";
     content += "<p><div class='col-xs-6 list-alt-green' style='font-size: 30px' onclick='editRow("+key+");'><span class='glyphicon glyphicon-ok list-alt-green'></span></div>";
     content += "</div>";
@@ -121,7 +158,17 @@ function makeTable() {
   }
   document.getElementById("table").innerHTML = content;
   $("#table-div").show();
+  setDefaults();
   /*$("#table-container").show();*/
+}
+
+function setDefaults() {
+  for (key in rows) {
+  day_select = "#day" + key;
+  time_select = "#time" + key;
+  $(day_select).val(rows[key].time.getDay());
+  $(time_select).val(rows[key].time.getHours());
+  }
 }
 
 function listOptions(key) {
@@ -139,10 +186,13 @@ function closeEdit(key){
 }
 
 function editRow(key){
-  newAmount = parseFloat(document.getElementById("amount"+key).value).toFixed(2);
-  newMerchant = document.getElementById("merchant" + key).value;
-  newDate = document.getElementById("date" + key).value;
-  rows[key] = {amount: newAmount, merchant: newMerchant, date: newDate};
+  newDay = parseInt(document.getElementById("day" + key).value);
+  newTime = document.getElementById("time" + key).value;
+  sunday = parseInt(rows[key].time.getDate()) - parseInt(rows[key].time.getDay());
+  newDay = sunday + newDay;
+  rows[key].time.setDate(newDay);
+  rows[key].time.setHours(newTime);
+  rows[key].date = getDay(rows[key].time.getDay()) + " " + getHour(rows[key].time.getHours());
   saveData();
 }
 
@@ -161,6 +211,19 @@ function resetData() {
   rows = {};
   saveData();
   resetPage();
+}
+
+function sortData() {
+  array = [];
+  for (key in rows) {
+    array.push(rows[key]);
+  }
+  array.sort(function(a, b){return a.time - b.time});
+  newObj = {};
+  for (key in array) {
+    newObj[key] = array[key];
+  }
+  rows = newObj;
 }
 
 function createEmail() {
@@ -195,7 +258,7 @@ function showOptionsBudget() {
   content += "<div class='col-xs-6 list-alt-green' onclick='addBudget();'><span class='glyphicon glyphicon-ok list-alt-green'></span></div></h2>";
   content += "</br></br>";
   document.getElementById("options-body").innerHTML = content;
-  showOptions();
+  showBudgetOptions();
 }
 
 function showOptionsRefresh() {
@@ -224,8 +287,15 @@ function showOptionsEmail() {
 }
 
 function showOptions(){
-  $("#options-body").show(function(){
-   $('html, body').animate({scrollTop:$(document).height()}, 'slow');
+  $("#options-body").show(250, function(){
+   $('html, body').animate({scrollTop:$(document).height()}, 'slow', function(){
+       });
+  });
+}
+
+function showBudgetOptions() {
+  $("#options-body").show(250, function(){
+    $("#budget-input").focus();
   });
 }
 
