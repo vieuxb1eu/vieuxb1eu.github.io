@@ -231,16 +231,12 @@ function createEmail() {
   spent = 0;
   subject = "Budget: "+getMonth() + " "+d.getDate();
   email = "?subject="+subject+"&body=";
-  email += '<table style="width:100%">';
   for (key in rows) {
     spent += parseFloat(rows[key].amount);
-    email += "<tr>";
-    email += "<td>"+rows[key].date + "</td><td>"+rows[key].merchant+"</td><td>"+ rows[key].amount+"</td>";
-    email += "</tr>";
+    email += "%0A"+rows[key].date + "     "+rows[key].merchant+"     "+ rows[key].amount;
   }
-  email += "</table>";
-  email += "Spent: $"+spent.toFixed(2);
-  email += "  Remaining: $"+(budget-spent).toFixed(2);
+  email += "%0ASpent: $"+spent.toFixed(2);
+  email += "%0ARemaining: $"+(budget-spent).toFixed(2);
   return email;
 }
 
