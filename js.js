@@ -104,8 +104,8 @@ function makeTable() {
     content += "<a href='javascript:void(0);' onclick='listOptions(" + key + ");' id='item"+key+"' class='list-group-item' style='background-color: #66BAC7;'><strong>" + rows[key].date + "</strong>-" + rows[key].merchant + "-" + "$" + rows[key].amount +"</a>";
     
     content += "<div class='row' id='options" + key + "' style='display:none;'>"
-    content += "<div class='col-xs-6 list-alt' style='font-size: 30px' onclick='removeItem(" + key + ");'><span class='glyphicon glyphicon-trash list-alt'></span></div>";
-    content += "<div class='col-xs-6 list-alt-edit' onclick='showEdit("+key+");' style='font-size: 30px'><span class='glyphicon glyphicon-pencil list-alt-edit'></span></div>";
+    content += "<div class='col-xs-6 list-alt' style='font-size: 30px' onclick='removeItem(" + key + ");'><span class='glyphicon glyphicon-trash list-alt' style='display:block; line-height:40px'></span></div>";
+    content += "<div class='col-xs-6 list-alt-edit' onclick='showEdit("+key+");' style='font-size: 30px'><span class='glyphicon glyphicon-pencil list-alt-edit'style='display:block; line-height:40px'></span></div>";
     content += "</div>";
 
     content += "<div id='edit" + key + "' style='display: none;'>";
