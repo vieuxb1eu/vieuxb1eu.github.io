@@ -241,7 +241,21 @@ function createEmail() {
 }
 
 function gotoEmail() {
-  window.location="mailto:"+createEmail();
+  var csv = "data:text/csv;charset=utf-8," + CSV(rows);
+  var encodedUri = encodeURI(csv);
+  var link = document.createElement("a");
+  var save = document.querySelector("g-savetodrive");
+  //save.setAttribte("data-src", encodedUri);
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", "my_data.csv");
+  document.body.appendChild(link); // Required for FF
+  gapi.savetodrive.render('send', {
+    src: encodedUri,
+    filename: "File.csv",
+    sitename: "Spent"
+  });
+ // link.click();
+ // window.open(encodedUri);
 }
 
 function showOptionsBudget() {
@@ -280,6 +294,24 @@ function showOptionsEmail() {
   content += "</br></br>";
   document.getElementById("options-body").innerHTML = content;
   showOptions();
+}
+function CSV(obj) {
+    var array = $.map(obj, function(value, index) {
+      return [value];
+    });
+    var keys = Object.keys(array[0]);
+
+    var result = keys.join(", ") + "\n";
+
+    array.forEach(function(obj){
+        keys.forEach(function(k, ix){
+            if (ix) result += ", ";
+            result += obj[k];
+        });
+        result += "\n";
+    });
+
+    return result;
 }
 
 function showOptions(){
