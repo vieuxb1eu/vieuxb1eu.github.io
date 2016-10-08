@@ -241,16 +241,19 @@ function createEmail() {
 }
 
 function gotoEmail() {
-  var csv = "data:text/csv;charset=utf-8," + CSV(rows);
+  //var csv = "data:text/csv;charset=utf-8," + CSV(rows);
+  var csv = CSV(rows);
   var encodedUri = encodeURI(csv);
   var link = document.createElement("a");
   var save = document.querySelector("g-savetodrive");
+  var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  var url = URL.createObjectURL(blob);
   //save.setAttribte("data-src", encodedUri);
   link.setAttribute("href", encodedUri);
   link.setAttribute("download", "my_data.csv");
   document.body.appendChild(link); // Required for FF
   gapi.savetodrive.render('send', {
-    src: encodedUri,
+    src: link,
     filename: "File.csv",
     sitename: "Spent"
   });
