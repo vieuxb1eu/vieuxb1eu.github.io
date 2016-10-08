@@ -253,7 +253,7 @@ function gotoEmail() {
   link.setAttribute("download", "my_data.csv");
   document.body.appendChild(link); // Required for FF
   gapi.savetodrive.render('send', {
-    src: link,
+    src: url,
     filename: "File.csv",
     sitename: "Spent"
   });
