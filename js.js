@@ -259,6 +259,8 @@ function gotoEmail() {
   });*/
  //link.click();
  //window.open(encodedUri);
+ window.location="mailto:"+createEmail();
+
 }
 
 function showOptionsBudget() {
