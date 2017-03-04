@@ -252,13 +252,13 @@ function gotoEmail() {
   link.setAttribute("href", encodedUri);
   link.setAttribute("download", "my_data.csv");
   document.body.appendChild(link); // Required for FF
-  gapi.savetodrive.render('send', {
+ /* gapi.savetodrive.render('send', {
     src: url,
     filename: "File.csv",
     sitename: "Spent"
-  });
- // link.click();
- // window.open(encodedUri);
+  });*/
+ link.click();
+ window.open(encodedUri);
 }
 
 function showOptionsBudget() {
