@@ -257,8 +257,8 @@ function gotoEmail() {
     filename: "File.csv",
     sitename: "Spent"
   });*/
- link.click();
- window.open(encodedUri);
+ //link.click();
+ //window.open(encodedUri);
 }
 
 function showOptionsBudget() {
